@@ -1,0 +1,47 @@
+<head>
+    {% load static %}
+    <!-- <link rel="stylesheet" href="{{ STATIC_URL}}bootstrap.min.css" /> -->
+    <link rel="stylesheet" href=" {% static 'bootstrap.min.css' %}" />
+    <link rel="stylesheet" href=" {% static 'style.css' %}" />
+    <link rel="stylesheet" href="{% static 'icofont/icofont.min.css' %}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <form action="" method="POST">
+            <div class="row">
+                <div class="col-lg-3">
+
+                </div>
+                <div class="col-lg-6">
+                    <div class="login">
+                        <div class="" style="display: inline-flex;">
+                            <i class="icofont icofont-users-alt-3 user-icofont user"></i>&nbsp;&nbsp;
+                            <h3>Registration Form</h3>
+                        </div>
+                        <span style="float: right" class="active"><a href="/login">Login</a></span>
+                        <div class="row  padding-class" style="text-align: center;">
+                            <!-- {% if messages %}
+                            {% for message in messages %} -->
+                            <span class="error-txt" style="color: red;">{{ error }}</span>
+                            <!-- {% endfor %}
+                            {% endif %} -->
+                        </div>
+                        <hr>
+                        {% csrf_token %}
+                        {{registerform}}
+                        <!-- <hr class="padding-class"> -->
+                        <input type="submit" style="width:100%" class="btn btn-primary padding-class btn-padding"
+                            value="Register">
+                    </div>
+                </div>
+                <div class="col-lg-3">
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+</body>

@@ -1,0 +1,36 @@
+.padding-class{
+    margin-top: 13px;
+    margin-bottom: 13px;
+}
+.login{
+    margin-top: 50px;
+    border: 1px solid lightgray;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 10px 10px 20px lightgrey;
+}
+.user{
+    font-size: 50px;
+    text-align: center;
+}
+.user-icofont{
+    border: 3px solid rgb(60 122 183);
+    border-radius: 35px;
+    padding: 6px;
+    color: rgb(60 122 183);
+}
+.btn-padding{
+    padding:10px 12px !important;
+}
+.error-txt{
+    color:red
+}
+.table-responsive-sm{
+    padding: 10px;
+    border: 1px solid lightgray;
+    box-shadow: 0px 0px 10px lightgrey;
+    border-radius: 10px;
+}
+table tr,table td, table tbody{
+    border-color: lightgray;
+}

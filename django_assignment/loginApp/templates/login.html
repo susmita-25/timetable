@@ -1,0 +1,38 @@
+<head>
+    {% load static %}
+    <!-- <link rel="stylesheet" href="{{ STATIC_URL}}bootstrap.min.css" /> -->
+    <link rel="stylesheet" href=" {% static 'bootstrap.min.css' %}" />
+    <link rel="stylesheet" href=" {% static 'style.css' %}" />
+    <link rel="stylesheet" href="{% static 'icofont/icofont.min.css' %}">
+</head>
+<div class="container">
+    <form action="" method="POST">
+        <div class="row">
+
+            <div class="col-lg-3">
+
+            </div>
+            <div class="col-lg-6">
+                <div class="login">
+                    <div class="user">
+                        <i class="icofont icofont-user-alt-5 user-icofont"></i>
+                    </div>
+                    <div class="row  padding-class" style="text-align: center;">
+                        <span class="error-txt" style="color: red;">{{ error }}</span>
+                    </div>
+                    <hr>
+                    {% csrf_token %}
+                    {{form}}
+                    <hr class="padding-class">
+                    <input type="submit" style="width:100%" class="btn btn-primary padding-class btn-padding" value="Login">
+                    <div class="padding-class" style="text-align: center;">
+                        <span class="active"><a href="/">Registration</a></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                
+            </div>
+        </div>
+    </form>
+</div>

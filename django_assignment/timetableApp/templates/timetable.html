@@ -1,0 +1,167 @@
+<html>
+
+<head>
+  <title>time table</title>
+  {% load static %}
+  <!-- <link rel="stylesheet" href="{{ STATIC_URL}}bootstrap.min.css" /> -->
+  <link rel="stylesheet" href=" {% static 'bootstrap.min.css' %}" />
+  <link rel="stylesheet" href=" {% static 'style.css' %}" />
+  <link rel="stylesheet" href="{% static 'icofont/icofont.min.css' %}">
+</head>
+
+<body bgcolor="skyblue" style="padding: 10px;">
+  <div class="container">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+        </div>
+        <ul class="nav navbar-nav" style="float: right ">
+          <li class="active"><a href="/login">Logout</a></li>
+        </ul>
+      </div>
+    </nav>
+  <H1>
+    <FONT COLOR="DARKCYAN">
+      <CENTER>COLLEGE TIME TABLE
+    </FONT>
+  </H1>
+  <div class="row  padding-class" style="text-align: center;">
+    <span class="error-txt" id="error" style="color: red;"></span>
+      {% if messages %}
+      {% for message in messages %}
+      <span class="error-txt" style="color: red;">{{ message }}</span>
+      {% endfor %}
+      {% endif %}
+  </div>
+  <div class="table-responsive-sm">
+    <!-- <form action="" method="POST"> -->
+    <div class="row padding-class">
+      <div class="col-lg-1">
+        <button class="btn btn-primary" onclick="addRow()"><i class="icofont icofont-plus"></i> Row</button>
+      </div>
+      <div class="col-lg-1">
+        <button class="btn btn-primary" onclick="addColumn()"><i class="icofont icofont-plus"></i> Column</button>
+      </div>
+    </div>
+    <table border="2" cellspacing="3" align="center" id="timetable" class="table">
+      {% csrf_token %}
+      
+      {% for key, values in timetable.items %}
+      <input type="hidden" id="csrf" value="{{csrf_token}}">
+      <tr class="tr_{{key}} tr-class">
+        <td name="day" contenteditable='true'>{{key}}</td>
+        {% for v in values %}
+        <td contenteditable='true' name="subject" class="{{key}}">{{v}}</td>
+        {% endfor %}
+        <td ><i style="cursor: pointer;" onclick="deleteRow(this)" class="icofont icofont-ui-delete"></i></td>
+      </tr>
+      {% endfor %}
+    </table>
+    <button class="btn btn-primary" onclick="save()">Save</button>
+    <!-- </form> -->
+  </div>
+  <script>
+    function save() {
+      document.getElementById("error").innerHTML=""
+      var allTr = document.getElementsByClassName("tr-class")
+      for (var i = 0; i < allTr.length; i++) {
+              for(j =0;j< allTr[i].children.length;j++){
+                if(j != allTr[i].children.length-1 && allTr[i].children[j].textContent == ""){
+                  document.getElementById("error").innerHTML="Fill all table records"
+                    return false
+                }
+              }
+          }
+      var token = document.getElementById("csrf").value
+      
+      map = new Map()
+      if (allTr.length > 0) {
+        for (var i = 0; i < allTr.length; i++) {
+          classList = allTr[i].className;
+          console.log(classList.indexOf("Time") >= 0)
+          td_arr = []
+
+          name = ""
+
+          for (var j = 0; j < allTr[i].children.length; j++) {
+            if (j != 0 ) {
+              if(j != allTr[i].children.length - 1){
+              console.log(allTr[i].children[j].innerHTML)
+              td_arr.push(allTr[i].children[j].textContent)
+              }
+            } else {
+              name = allTr[i].children[j].textContent==""?j:allTr[i].children[j].textContent;
+            }
+          }
+          map.set(name, td_arr);
+        }
+        console.log(map)
+        console.log(JSON.stringify(map))
+        finalStr = JSON.stringify(map, (key, value) => (value instanceof Map ? [...value] : value));
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "/timetable", true);
+        xhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhttp.setRequestHeader('X-CSRFToken', token);
+        xhttp.send(data = finalStr);
+      }
+    }
+    function deleteRow(key) {
+      // var allDiv = document.getElementsByClassName("tr_" + key)
+      // for (var i = 0; i < allDiv.length; i++) {
+      //   allDiv[i].remove()
+      // }
+      var table = document.getElementById("timetable");
+      var rowCount = table.rows.length;
+      if(rowCount == 1){
+        document.getElementById("error").innerHTML="You canot delete all records"
+        return false
+      }
+      if(typeof(key)=='object'){
+        key.parentElement.parentElement.remove()
+      }else{
+        document.getElementById("timetable").deleteRow(key.trim());
+      }
+      
+    }
+    function addRow() {
+      var table = document.getElementById("timetable");
+      var rowCount = table.rows.length;
+      var row = table.insertRow(rowCount);
+      row.setAttribute("class", "tr-class")
+      var cellCount = document.getElementById("timetable").rows[0].cells.length;
+      for(var i = 0;i<cellCount;i++){
+        if(i != cellCount-1){
+          var cell1 = row.insertCell(i);
+          cell1.setAttribute("contenteditable", "true")  
+          cell1.innerHTML = "";
+        }else{
+          var cell1 = row.insertCell(i);
+          cell1.innerHTML = "<i class='icofont icofont-ui-delete' onclick='deleteRow(this)'></i>";
+        }
+      }
+    }
+
+    function addColumn() {
+      tbl = document.getElementById("timetable");
+      tr = tbl.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+
+          var cell=tr[i].insertCell( document.getElementById("timetable").rows[i].cells.length-1);
+          cell.setAttribute("contenteditable", "true")  
+      }
+    }
+    var map = new Map()
+  // function setValue(element,key){
+  //   console.log("row" + element.parentNode.rowIndex + 
+  //   " - column" + element.cellIndex);
+  //   if(map.has(key)){
+  //     map.set(key,)
+  //   }else{
+
+  //   }
+  // }
+  </script>
+  </div>
+</body>
+
+</html>
